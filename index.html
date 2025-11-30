@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadoop Ecosystem Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Simple SVG icon components
+        const Database = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+            </svg>
+        );
+
+        const Cpu = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            </svg>
+        );
+
+        const Network = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+            </svg>
+        );
+
+        const HardDrive = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+            </svg>
+        );
+
+        const FileText = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+        );
+
+        const Play = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const HadoopVisualization = () => {
+            const [activeStep, setActiveStep] = useState(0);
+
+            const steps = [
+                {
+                    title: "1. HDFS (Storage Layer)",
+                    description: "Hadoop Distributed File System stores data across multiple nodes",
+                    details: [
+                        "Splits large files into blocks (typically 128MB)",
+                        "Replicates blocks across multiple DataNodes",
+                        "NameNode manages metadata and file locations",
+                        "Provides fault tolerance and high availability"
+                    ]
+                },
+                {
+                    title: "2. MapReduce (Processing Layer)",
+                    description: "Programming model for processing large datasets in parallel",
+                    details: [
+                        "Map phase: Processes input data in parallel",
+                        "Shuffle & Sort: Organizes intermediate data",
+                        "Reduce phase: Aggregates results",
+                        "Handles failures automatically"
+                    ]
+                },
+                {
+                    title: "3. YARN (Resource Management)",
+                    description: "Yet Another Resource Negotiator manages cluster resources",
+                    details: [
+                        "ResourceManager: Allocates cluster resources",
+                        "NodeManagers: Run on each node to manage containers",
+                        "ApplicationMaster: Manages individual application lifecycle",
+                        "Enables multiple processing engines (not just MapReduce)"
+                    ]
+                }
+            ];
+
+            return (
+                <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800 p-8 overflow-auto">
+                    <div className="max-w-6xl mx-auto">
+                        <h1 className="text-4xl font-bold text-white mb-2 text-center">
+                            Hadoop Ecosystem
+                        </h1>
+                        <p className="text-slate-300 text-center mb-8">
+                            The three core components working together
+                        </p>
+
+                        {/* Step Navigation */}
+                        <div className="flex justify-center gap-4 mb-12">
+                            {steps.map((step, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setActiveStep(idx)}
+                                    className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                                        activeStep === idx
+                                            ? 'bg-blue-600 text-white shadow-lg scale-105'
+                                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                                    }`}
+                                >
+                                    Step {idx + 1}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Main Visualization Area */}
+                        <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 mb-8 border border-slate-700">
+                            <h2 className="text-2xl font-bold text-white mb-2">
+                                {steps[activeStep].title}
+                            </h2>
+                            <p className="text-slate-300 mb-6">
+                                {steps[activeStep].description}
+                            </p>
+
+                            {/* Visual Representation */}
+                            {activeStep === 0 && (
+                                <div className="space-y-6">
+                                    {/* NameNode */}
+                                    <div className="bg-purple-600/20 border-2 border-purple-500 rounded-lg p-6 text-center">
+                                        <Database className="w-12 h-12 text-purple-400 mx-auto mb-2" />
+                                        <h3 className="text-xl font-bold text-purple-300">NameNode</h3>
+                                        <p className="text-sm text-slate-300">Manages metadata & file locations</p>
+                                    </div>
+
+                                    {/* DataNodes */}
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[1, 2, 3].map((node) => (
+                                            <div key={node} className="bg-blue-600/20 border-2 border-blue-500 rounded-lg p-4 text-center">
+                                                <HardDrive className="w-10 h-10 text-blue-400 mx-auto mb-2" />
+                                                <h4 className="font-bold text-blue-300">DataNode {node}</h4>
+                                                <div className="mt-2 space-y-1">
+                                                    <div className="bg-blue-500/30 rounded p-1 text-xs text-slate-200">Block A</div>
+                                                    <div className="bg-blue-500/30 rounded p-1 text-xs text-slate-200">Block B</div>
+                                                    <div className="bg-blue-500/30 rounded p-1 text-xs text-slate-200">Block C</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="text-center text-slate-400 text-sm">
+                                        Data is replicated across nodes for fault tolerance
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeStep === 1 && (
+                                <div className="space-y-6">
+                                    {/* Map Phase */}
+                                    <div className="bg-green-600/20 border-2 border-green-500 rounded-lg p-6">
+                                        <div className="flex items-center justify-center mb-4">
+                                            <FileText className="w-10 h-10 text-green-400 mr-3" />
+                                            <h3 className="text-xl font-bold text-green-300">Map Phase</h3>
+                                        </div>
+                                        <div className="grid grid-cols-4 gap-2">
+                                            {[1, 2, 3, 4].map((mapper) => (
+                                                <div key={mapper} className="bg-green-500/30 rounded p-3 text-center">
+                                                    <Cpu className="w-6 h-6 text-green-300 mx-auto mb-1" />
+                                                    <p className="text-xs text-slate-200">Mapper {mapper}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Shuffle & Sort */}
+                                    <div className="text-center">
+                                        <Network className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                                        <p className="text-yellow-300 font-semibold">Shuffle & Sort</p>
+                                    </div>
+
+                                    {/* Reduce Phase */}
+                                    <div className="bg-orange-600/20 border-2 border-orange-500 rounded-lg p-6">
+                                        <div className="flex items-center justify-center mb-4">
+                                            <Play className="w-10 h-10 text-orange-400 mr-3" />
+                                            <h3 className="text-xl font-bold text-orange-300">Reduce Phase</h3>
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {[1, 2, 3].map((reducer) => (
+                                                <div key={reducer} className="bg-orange-500/30 rounded p-3 text-center">
+                                                    <Cpu className="w-6 h-6 text-orange-300 mx-auto mb-1" />
+                                                    <p className="text-xs text-slate-200">Reducer {reducer}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeStep === 2 && (
+                                <div className="space-y-6">
+                                    {/* Resource Manager */}
+                                    <div className="bg-red-600/20 border-2 border-red-500 rounded-lg p-6 text-center">
+                                        <Network className="w-12 h-12 text-red-400 mx-auto mb-2" />
+                                        <h3 className="text-xl font-bold text-red-300">ResourceManager</h3>
+                                        <p className="text-sm text-slate-300">Central authority for resource allocation</p>
+                                    </div>
+
+                                    {/* Node Managers */}
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[1, 2, 3].map((node) => (
+                                            <div key={node} className="bg-cyan-600/20 border-2 border-cyan-500 rounded-lg p-4">
+                                                <div className="text-center mb-3">
+                                                    <Cpu className="w-10 h-10 text-cyan-400 mx-auto mb-2" />
+                                                    <h4 className="font-bold text-cyan-300">NodeManager {node}</h4>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <div className="bg-cyan-500/30 rounded p-2 text-xs text-center text-slate-200">
+                                                        <p className="font-semibold">Container 1</p>
+                                                        <p className="text-[10px]">AppMaster</p>
+                                                    </div>
+                                                    <div className="bg-cyan-500/30 rounded p-2 text-xs text-center text-slate-200">
+                                                        <p className="font-semibold">Container 2</p>
+                                                        <p className="text-[10px]">Task</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="text-center text-slate-400 text-sm">
+                                        YARN allocates resources dynamically across applications
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Details Section */}
+                        <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 border border-slate-700">
+                            <h3 className="text-xl font-bold text-white mb-4">Key Features</h3>
+                            <ul className="space-y-3">
+                                {steps[activeStep].details.map((detail, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                        <span className="text-blue-400 mr-3 mt-1">▸</span>
+                                        <span className="text-slate-300">{detail}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* How They Work Together */}
+                        <div className="mt-8 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/50 rounded-2xl p-8">
+                            <h3 className="text-xl font-bold text-white mb-4 text-center">
+                                How They Work Together
+                            </h3>
+                            <p className="text-slate-300 text-center">
+                                <strong className="text-purple-300">HDFS</strong> stores the data across nodes →{' '}
+                                <strong className="text-green-300">MapReduce</strong> processes it in parallel →{' '}
+                                <strong className="text-red-300">YARN</strong> manages resources and scheduling
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<HadoopVisualization />);
+    </script>
+</body>
+</html>
